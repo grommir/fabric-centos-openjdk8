@@ -72,6 +72,8 @@ The default command for this image is [/deployments/run-java.sh](https://github.
 
 For these images the variable **JAVA_APP_DIR** has the default value `/deployments`
 
+* **APP_ARGS** command line options to run application.
+
 The run script can be influenced by the following environment variables:
 
 * **JAVA_APP_DIR** the directory where the application resides. All paths in your application are relative to this directory.
