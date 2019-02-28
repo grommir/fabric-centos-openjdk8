@@ -34,7 +34,19 @@ COPY run-java.sh debug-options container-limits java-default-options /deployment
 RUN chmod 755 /deployments/run-java.sh /deployments/java-default-options /deployments/container-limits /deployments/debug-options
 
 
-ADD keystore.jks .
+# ADD keystore.jks .
+
+# Install python
+RUN INSTALL_PKGS="libjpeg-turbo libjpeg-turbo-devel python27 python27-python-devel python27-python-setuptools \
+    python27-python-pip nss_wrapper httpd24 httpd24-httpd-devel httpd24-mod_ssl \
+    httpd24-mod_auth_kerb httpd24-mod_ldap httpd24-mod_session atlas-devel gcc-gfortran \
+    libffi-devel libtool-ltdl enchant" && \
+    yum install -y centos-release-scl && \
+    yum -y --setopt=tsflags=nodocs install --enablerepo=centosplus $INSTALL_PKGS && \
+    rpm -V $INSTALL_PKGS && \
+    # Remove centos-logos (httpd dependency) to keep image size smaller.
+    rpm -e --nodeps centos-logos && \
+    yum -y clean all --enablerepo='*'
 
 
 CMD ["sh", "-c", "/deployments/run-java.sh $APP_ARGS" ]
